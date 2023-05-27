@@ -19,10 +19,19 @@ export class LotrClient {
 
   /**
    * Get all movies.
-   * @param param The pagination parameters.
+   * @param query The query to use for filtering
    * @returns A list of movies.
    * */
   public async getMovies(query?: Query) {
     return this.movieService.getMovies(query);
+  }
+
+  /**
+   * Get a movie by id.
+   * @param id The id of the movie.
+   * @returns The movie with the given id.
+   * */
+  public async getMovieById(id: string) {
+    return this.movieService.getMovieById(id);
   }
 }

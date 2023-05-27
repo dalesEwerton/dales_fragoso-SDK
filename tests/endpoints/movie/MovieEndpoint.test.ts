@@ -60,4 +60,21 @@ describe('MovieEndpoint', () => {
       expect(axios.get).toHaveBeenCalledWith(`${fakeApiUrl}/movie${query}`, { headers });
     });
   });
+
+  describe('getMovieById', () => {
+    it('should fetch a movie successfully', async () => {
+      const mockedMovie = [MovieMock.generate()];
+      const id = 'fake-id';
+
+      jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: { docs: mockedMovie } });
+
+      const movie = await movieEndpoint.getMovieById(id);
+
+      expect(movie).toBeDefined();
+      expect(movie.docs).toBeDefined();
+      expect(movie.docs).toHaveLength(mockedMovie.length);
+      expect(axios.get).toHaveBeenCalledTimes(1);
+      expect(axios.get).toHaveBeenCalledWith(`${fakeApiUrl}/movie/${id}`, { headers });
+    });
+  });
 });

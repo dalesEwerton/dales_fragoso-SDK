@@ -27,11 +27,44 @@ export class MovieService {
         meta
       }
     } catch (error) {
-      if (!this.enableLogging) throw error;
+      if (!this.enableLogging) {
+        throw error;
+      }
       
-      if (error instanceof AxiosError)
-      this.logger.error(`Failed to get movies: ${error.message}`);
-      else this.logger.error(`Failed to get movies: ${error}`);
+      if (error instanceof AxiosError) {
+        this.logger.error(`Failed to get movies. ${error.message}`);
+      }
+      else {
+        this.logger.error(`Error on getting movies. ${error}`);
+      }
+
+      throw error;
+    }
+  }
+
+  public async getMovieById(id: string): Promise<ClientResponse<Movie>> {
+    try {
+      const { docs, ...meta } = await this.movieEndpoint.getMovieById(id);
+      
+      if (!docs.length) {
+        throw new Error(`Movie with id ${id} not found`);
+      }
+
+      return {
+        data: docs[0] as Movie,
+        meta
+      }
+    } catch (error) {
+      if (!this.enableLogging) {
+        throw error;
+      }
+      
+      if (error instanceof AxiosError) {
+        this.logger.error(`Failed to get movie by id. ${error.message}`);
+      }
+      else {
+        this.logger.error(`Error on getting movie by id. ${error}`);
+      }
 
       throw error;
     }
