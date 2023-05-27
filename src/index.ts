@@ -1,3 +1,3 @@
-export function helloMiddleEarth() {
-  return 'Hello Middle Earth!';
-}
+import { LotrClient } from "./LotrClient";
+
+export default LotrClient;

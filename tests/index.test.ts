@@ -1,7 +1,7 @@
-import { helloMiddleEarth } from "../src";
+import LotrClient from "../src";
 
-describe("helloMiddleEarth", () => {
-  it("should return 'Hello Middle Earth!'", () => {
-    expect(helloMiddleEarth()).toBe("Hello Middle Earth!");
+describe("LotrClient", () => {
+  it("should be defined", () => {
+    expect(LotrClient).toBeDefined();
   });
 });
