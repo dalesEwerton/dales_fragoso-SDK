@@ -17,7 +17,9 @@ export class LotrClient {
    * @param enableLogging Whether to enable logging or not.
    * @returns A new instance of the LotrClient.
    * */
-  constructor(apiKey: string, enableLogging: boolean) {
+  constructor(apiKey: string, enableLogging: boolean = false) {
+    if (!apiKey) throw new Error('API key is required.');
+
     const baseUrl = 'https://the-one-api.dev/v2';
     this.movieService = new MovieService(baseUrl, apiKey, enableLogging);
     this.quoteService = new QuoteService(baseUrl, apiKey, enableLogging);

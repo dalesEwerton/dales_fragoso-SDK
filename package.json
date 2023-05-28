@@ -1,15 +1,19 @@
 {
   "name": "dales_fragoso-sdk-lotr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "lint": "tsc",
     "test": "jest --config=jest.config.json",
-    "test:watch": "jest --config=jest.config.json --watchAll"
+    "test:watch": "jest --config=jest.config.json --watchAll",
+    "prepare": "pnpm run build"
   },
   "keywords": [],
   "author": "",
