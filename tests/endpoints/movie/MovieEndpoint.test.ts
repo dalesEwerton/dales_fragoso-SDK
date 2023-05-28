@@ -2,6 +2,8 @@ import axios from 'axios';
 import { MovieEndpoint } from '../../../src/endpoints/movie/MovieEndpoint';
 import { Movie } from '../../../src/types/Movie';
 import { MovieMock } from '../../__mocks__/MovieMock';
+import { Quote } from '../../../src/types/Quote';
+import { QuoteMock } from '../../__mocks__/QuoteMock';
 
 jest.mock('axios');
 
@@ -77,4 +79,44 @@ describe('MovieEndpoint', () => {
       expect(axios.get).toHaveBeenCalledWith(`${fakeApiUrl}/movie/${id}`, { headers });
     });
   });
+
+  describe('getMovieQuotes', () => {
+    it('should fetch movie quotes successfully', async () => {
+      const mockedQuotes = [
+        QuoteMock.generate(),
+        QuoteMock.generate(),
+        QuoteMock.generate(),
+      ];
+      const movieId = 'fake-movie-id';
+
+      jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: { docs: mockedQuotes } });
+
+      const quotes = await movieEndpoint.getMovieQuotes(movieId);
+
+      expect(quotes).toBeDefined();
+      expect(quotes.docs).toBeDefined();
+      expect(quotes.docs).toHaveLength(mockedQuotes.length);
+      expect(axios.get).toHaveBeenCalledTimes(1);
+      expect(axios.get).toHaveBeenCalledWith(`${fakeApiUrl}/movie/${movieId}/quote`, { headers });
+    });
+
+    it('should accept a query parameter', async () => {
+      const mockedQuotes = [
+        QuoteMock.generate(),
+        QuoteMock.generate(),
+      ];
+      const movieId = 'fake-movie-id';
+      const query = '?character=Gandalf';
+
+      jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: { docs: mockedQuotes } });
+
+      const quotes = await movieEndpoint.getMovieQuotes(movieId, query);
+
+      expect(quotes).toBeDefined();
+      expect(quotes.docs).toBeDefined();
+      expect(quotes.docs).toHaveLength(mockedQuotes.length);
+      expect(axios.get).toHaveBeenCalledTimes(1);
+      expect(axios.get).toHaveBeenCalledWith(`${fakeApiUrl}/movie/${movieId}/quote${query}`, { headers });
+    });
+  }); 
 });

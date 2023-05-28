@@ -4,8 +4,8 @@ import { QueryParser } from "../../utils/QueryParser";
 import { Logger } from "../../utils/Logger";
 import { AxiosError } from "axios";
 import { Query } from "../../types/Query";
-import { Metadata } from "../../types/Metadata";
 import { ClientResponse } from "../../types/ClientResponse";
+import { Quote } from "../../types/Quote";
 
 export class MovieService {
   private movieEndpoint: MovieEndpoint;
@@ -64,6 +64,30 @@ export class MovieService {
       }
       else {
         this.logger.error(`Error on getting movie by id. ${error}`);
+      }
+
+      throw error;
+    }
+  }
+
+  public async getMovieQuotes(id: string, query?: Query): Promise<ClientResponse<Quote[]>> {
+    try {
+      const parsedQuery = query? QueryParser.parse(query): '';
+      const { docs, ...meta } = await this.movieEndpoint.getMovieQuotes(id, parsedQuery);
+      return {
+        data: docs,
+        meta
+      }
+    } catch (error) {
+      if (!this.enableLogging) {
+        throw error;
+      }
+      
+      if (error instanceof AxiosError) {
+        this.logger.error(`Failed to get movie quotes. ${error.message}`);
+      }
+      else {
+        this.logger.error(`Error on getting movie quotes. ${error}`);
       }
 
       throw error;

@@ -6,6 +6,8 @@ import { QueryParser } from '../../../src/utils/QueryParser';
 import { Logger } from '../../../src/utils/Logger';
 import { MovieMock } from '../../__mocks__/MovieMock';
 import { ApiResponseMock } from '../../__mocks__/ApiResponseMock';
+import { Quote } from '../../../src/types/Quote';
+import { QuoteMock } from '../../__mocks__/QuoteMock';
 
 jest.mock('../../../src/endpoints/movie/MovieEndpoint');
 jest.mock('../../../src/utils/Logger');
@@ -154,6 +156,58 @@ describe('MovieService', () => {
 
       expect(movieEndpointMock.getMovieById).toHaveBeenCalledTimes(1);
       expect(movieEndpointMock.getMovieById).toHaveBeenCalledWith(mockMovie._id);
+      expect(loggerMock.error).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getMovieQuotes', () => {
+    it('should fetch movie quotes successfully', async () => {
+      const mockedQuotes: Quote[] = [
+        QuoteMock.generate(),
+        QuoteMock.generate(),
+      ]
+      const movieId = 'fake-movie-id';
+      const emptyQuery = ""
+      const response = ApiResponseMock.generate<Quote[]>(mockedQuotes);
+
+      movieEndpointMock.getMovieQuotes.mockResolvedValueOnce(response);
+
+      const quotes = await movieService.getMovieQuotes(movieId);
+
+      expect(quotes.data).toEqual(mockedQuotes);
+      expect(movieEndpointMock.getMovieQuotes).toHaveBeenCalledTimes(1);
+      expect(movieEndpointMock.getMovieQuotes).toHaveBeenCalledWith(movieId, emptyQuery);
+      expect(loggerMock.error).not.toHaveBeenCalled();
+    });
+
+    it('should log and re-throw error when enableLogging is true', async () => {
+      const movieId = 'fake-movie-id';
+      const errorMessage = 'Request failed';
+      const error = new Error(errorMessage);
+
+      movieEndpointMock.getMovieQuotes.mockRejectedValueOnce(error);
+
+      await expect(movieService.getMovieQuotes(movieId)).rejects.toThrow(error);
+
+      expect(movieEndpointMock.getMovieQuotes).toHaveBeenCalledTimes(1);
+      expect(movieEndpointMock.getMovieQuotes).toHaveBeenCalledWith(movieId, "");
+      expect(loggerMock.error).toHaveBeenCalledWith(`Error on getting movie quotes. Error: ${errorMessage}`);
+    });
+
+    it('should re-throw error when enableLogging is false', async () => {
+      const movieId = 'fake-movie-id';
+      const errorMessage = 'Request failed';
+      const error = new Error(errorMessage);
+      movieService = new MovieService(baseUrl, apiKey, false);
+      
+      (movieService as any).movieEndpoint = movieEndpointMock;
+      (movieService as any).logger = loggerMock;
+      movieEndpointMock.getMovieQuotes.mockRejectedValueOnce(error);
+
+      await expect(movieService.getMovieQuotes(movieId)).rejects.toThrow(error);
+
+      expect(movieEndpointMock.getMovieQuotes).toHaveBeenCalledTimes(1);
+      expect(movieEndpointMock.getMovieQuotes).toHaveBeenCalledWith(movieId, "");
       expect(loggerMock.error).not.toHaveBeenCalled();
     });
   });
