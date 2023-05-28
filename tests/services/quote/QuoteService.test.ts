@@ -96,4 +96,38 @@ describe("QuoteService", () => {
       expect(loggerMock.error).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe("getQuoteById", () => {
+    it('should fetch quote successfully', async () => {
+      const mockQuote = QuoteMock.generate();
+      const response = ApiResponseMock.generate<Quote[]>([mockQuote]);
+
+      quoteEndpointMock.getQuoteById.mockResolvedValueOnce(response);
+
+      const quote = await quoteService.getQuoteById(mockQuote._id);
+
+      expect(quote.data).toEqual(mockQuote);
+      expect(quoteEndpointMock.getQuoteById).toHaveBeenCalledTimes(1);
+      expect(loggerMock.error).not.toHaveBeenCalled();
+    });
+
+    it('should throw error when failed to fetch quote', async () => {
+      const error = new Error('Failed to fetch quote');
+      quoteEndpointMock.getQuoteById.mockRejectedValueOnce(error);
+
+      await expect(quoteService.getQuoteById('fake-id')).rejects.toThrow(error);
+      expect(quoteEndpointMock.getQuoteById).toHaveBeenCalledTimes(1);
+      expect(loggerMock.error).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw error when quote is not found', async () => {
+      const response = ApiResponseMock.generate<Quote[]>([]);
+
+      quoteEndpointMock.getQuoteById.mockResolvedValueOnce(response);
+
+      await expect(quoteService.getQuoteById('fake-id')).rejects.toThrow('Quote with id fake-id not found');
+      expect(quoteEndpointMock.getQuoteById).toHaveBeenCalledTimes(1);
+      expect(loggerMock.error).toHaveBeenCalled();
+    });
+  });
 });

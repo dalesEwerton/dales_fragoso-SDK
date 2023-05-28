@@ -59,4 +59,13 @@ export class LotrClient {
   public async getQuotes(query?: Query): Promise<ClientResponse<Quote[]>> {
     return this.quoteService.getQuotes(query);
   }
+
+  /**
+   * Get a quote by id.
+   * @param id The id of the quote.
+   * @returns The quote with the given id.
+   * */
+  public async getQuoteById(id: string): Promise<ClientResponse<Quote>> {
+    return this.quoteService.getQuoteById(id);
+  }
 }

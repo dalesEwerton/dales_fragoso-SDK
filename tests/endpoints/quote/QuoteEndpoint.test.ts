@@ -58,4 +58,20 @@ describe('QuoteEndpoint', () => {
       expect(axios.get).toHaveBeenCalledWith(`${fakeApiUrl}/quote${query}`, { headers });
     });
   });
+
+  describe('getQuoteById', () => {
+    it('should fetch quote by id successfully', async () => {
+      const mockedQuote = QuoteMock.generate();
+
+      jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: { docs: [mockedQuote] } });
+
+      const quote = await quoteEndpoint.getQuoteById(mockedQuote._id);
+
+      expect(quote).toBeDefined();
+      expect(quote.docs).toBeDefined();
+      expect(quote.docs).toHaveLength(1);
+      expect(axios.get).toHaveBeenCalledTimes(1);
+      expect(axios.get).toHaveBeenCalledWith(`${fakeApiUrl}/quote/${mockedQuote._id}`, { headers });
+    });
+  });
 });

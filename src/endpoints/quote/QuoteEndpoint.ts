@@ -27,4 +27,12 @@ export class QuoteEndpoint {
 
     return response.data;
   }
+
+  public async getQuoteById(id: string): Promise<ApiResponse<Quote[]>> {
+    const url = `${this.baseUrl}/quote/${id}`;
+    const config = this.getConfig();
+    const response = await axios.get(url, config);
+
+    return response.data;
+  }
 }

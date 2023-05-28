@@ -40,4 +40,31 @@ export class QuoteService {
       throw error;
     }
   }
+
+  public async getQuoteById(id: string): Promise<ClientResponse<Quote>> {
+    try {
+      const { docs } = await this.quoteEndpoint.getQuoteById(id);
+
+      if (!docs.length) {
+        throw new Error(`Quote with id ${id} not found`);
+      }
+
+      return {
+        data: docs[0] as Quote,
+      }
+    } catch (error) {
+      if (!this.enableLogging) {
+        throw error;
+      }
+
+      if (error instanceof AxiosError) {
+        this.logger.error(`Failed to get quote. ${error.message}`);
+      }
+      else {
+        this.logger.error(`Error on getting quote. ${error}`);
+      }
+
+      throw error;
+    }
+  }
 }

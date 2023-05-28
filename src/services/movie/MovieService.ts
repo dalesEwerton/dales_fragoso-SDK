@@ -44,7 +44,7 @@ export class MovieService {
 
   public async getMovieById(id: string): Promise<ClientResponse<Movie>> {
     try {
-      const { docs, ...meta } = await this.movieEndpoint.getMovieById(id);
+      const { docs } = await this.movieEndpoint.getMovieById(id);
       
       if (!docs.length) {
         throw new Error(`Movie with id ${id} not found`);
@@ -52,7 +52,6 @@ export class MovieService {
 
       return {
         data: docs[0] as Movie,
-        meta
       }
     } catch (error) {
       if (!this.enableLogging) {
