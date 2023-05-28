@@ -4,7 +4,7 @@ This is an SDK for the LOTR API, providing convenient methods to interact with t
 
 ## Getting an API Key
 
-To use the Dales Fragoso SDK Lotr, you need an API key from the Lotr API. Here's how you can obtain one:
+To use the SDK, you need an API key from the LOTR API. Here's how you can obtain one:
 
 1. Visit [https://the-one-api.dev/](https://the-one-api.dev/) in your web browser.
 2. Click on the "Sign Up" button on the top right menu.
@@ -36,6 +36,26 @@ Using pnpm:
 pnpm add dales_fragoso-sdk-lotr
 ```
 
+## Testing
+To run the tests for this package, follow these steps:
+
+Make sure you have all the dependencies installed by running the following command:
+```bash
+pnpm install
+```
+
+Execute the test command:
+```bash
+pnpm test
+```
+This will run the test suite using Jest and provide you with the test results.
+
+(Optional) If you want to run the tests in watch mode, use the following command:
+```bash
+pnpm run test:watch
+```
+This will run the tests in watch mode, where the test runner will re-run the tests whenever there are changes to the source code or test files. You can use this to apply TDD during the development process.
+
 ## Basic Usage
 
 ```typescript
@@ -51,7 +71,7 @@ async function main() {
     // Example: Get all movies with pagination
     const pagination: Pagination = {
       limit: 10,
-      page: 2
+      page: 1
     };
     const moviesResponse = await client.getMovies(pagination);
     console.log(moviesResponse.data); // List of movies for the specified page
@@ -112,7 +132,7 @@ async function main() {
         match: {
           attribute: 'name',
           operation: '=',
-          value: 'Fellowship of the Ring'
+          value: 'The Two Towers'
         }
       },
       {
@@ -137,6 +157,10 @@ async function main() {
 
 main();
 ```
+
+Check the type documentation in the package to learn how to properly use each one of the available features.
+
+**Keep in mind that the filters will be aplied by the API using MongoDB aggregations, and therefore you should be carefull to not override your previous filters**
 
 ## License
 
