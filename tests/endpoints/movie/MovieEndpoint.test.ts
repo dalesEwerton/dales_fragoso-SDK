@@ -2,7 +2,6 @@ import axios from 'axios';
 import { MovieEndpoint } from '../../../src/endpoints/movie/MovieEndpoint';
 import { Movie } from '../../../src/types/Movie';
 import { MovieMock } from '../../__mocks__/MovieMock';
-import { Quote } from '../../../src/types/Quote';
 import { QuoteMock } from '../../__mocks__/QuoteMock';
 
 jest.mock('axios');
