@@ -1,6 +1,9 @@
 import { MovieService } from "./services/movie/MovieService";
 import { QuoteService } from "./services/quote/QuoteService";
 import { Query } from "./types/Query";
+import { Pagination } from "../dist";
+import { Filter } from "../dist";
+import { Sort } from "../dist";
 import { ClientResponse } from "./types/ClientResponse";
 import { Movie } from "./types/Movie";
 import { Quote } from "./types/Quote";
@@ -27,10 +30,21 @@ export class LotrClient {
 
   /**
    * Get all movies.
-   * @param query The query to use for filtering
+   * @param pagination The pagination to use.
+   * @param filters The filters to use.
+   * @param sort The sort to use.
    * @returns A list of movies.
    * */
-  public async getMovies(query?: Query): Promise<ClientResponse<Movie[]>> {
+  public async getMovies(
+    pagination?: Pagination,
+    filters?: Filter[],
+    sort?: Sort
+  ): Promise<ClientResponse<Movie[]>> {
+    const query: Query = {
+      pagination,
+      filters,
+      sort
+    };
     return this.movieService.getMovies(query);
   }
 
@@ -46,10 +60,22 @@ export class LotrClient {
   /**
    * Get quotes from a movie.
    * @param id The id of the movie.
-   * @param query The query to use for filtering.
-   * @returns A list of characters.
+   * @param pagination The pagination to use.
+   * @param filters The filters to use.
+   * @param sort The sort to use.
+   * @returns A list of quotes from a specific movie.
    * */
-  public async getMovieQuotes(id: string, query?: Query): Promise<ClientResponse<Quote[]>> {
+  public async getMovieQuotes(
+    id: string,
+    pagination?: Pagination,
+    filters?: Filter[],
+    sort?: Sort
+  ): Promise<ClientResponse<Quote[]>> {
+    const query: Query = {
+      pagination,
+      filters,
+      sort
+    };
     return this.movieService.getMovieQuotes(id, query);
   }
 
@@ -58,7 +84,16 @@ export class LotrClient {
    * @param query The query to use for filtering.
    * @returns A list of quotes.
    * */
-  public async getQuotes(query?: Query): Promise<ClientResponse<Quote[]>> {
+  public async getQuotes(
+    pagination?: Pagination,
+    filters?: Filter[],
+    sort?: Sort
+  ): Promise<ClientResponse<Quote[]>> {
+    const query: Query = {
+      pagination,
+      filters,
+      sort
+    };
     return this.quoteService.getQuotes(query);
   }
 

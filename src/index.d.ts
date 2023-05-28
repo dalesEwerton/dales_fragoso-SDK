@@ -6,3 +6,4 @@ export * from './types/Pagination';
 export * from './types/Query';
 export * from './types/Quote';
 export * from './types/Sort';
+export * from './LotrClient';
